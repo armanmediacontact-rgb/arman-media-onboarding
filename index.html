@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arman Media — Client Onboarding</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;500&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --gold: #C9A84C;
+    --gold-dim: #a8882e;
+    --gold-pale: #F5E9CC;
+    --gold-faint: #fdf6e9;
+    --ink: #0f0f0f;
+    --ink2: #1c1c1c;
+    --muted: #6b6b6b;
+    --faint: #f2f2f0;
+    --border: #e3e3e0;
+    --white: #ffffff;
+    --radius: 10px;
+    --sans: 'Inter', system-ui, sans-serif;
+    --serif: 'Playfair Display', Georgia, serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--faint);
+    color: var(--ink);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: var(--ink);
+    padding: 1.1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-logo {
+    font-family: var(--sans);
+    font-size: .7rem;
+    font-weight: 600;
+    letter-spacing: 3px;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+  .header-step {
+    font-size: .72rem;
+    color: #666;
+    letter-spacing: 1px;
+  }
+
+  /* ── PROGRESS ── */
+  .progress-bar {
+    height: 2px;
+    background: #2a2a2a;
+    position: sticky;
+    top: 49px;
+    z-index: 99;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--gold);
+    transition: width .5s cubic-bezier(.4,0,.2,1);
+    width: 0%;
+  }
+
+  /* ── WRAPPER ── */
+  .shell {
+    max-width: 620px;
+    margin: 0 auto;
+    padding: 0 1.25rem 6rem;
+  }
+
+  /* ── COVER ── */
+  .cover {
+    background: var(--ink2);
+    border-radius: 0 0 20px 20px;
+    padding: 3.5rem 2.5rem 3rem;
+    margin-bottom: 2.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--gold);
+  }
+  .cover-eyebrow {
+    font-size: .68rem;
+    font-weight: 500;
+    letter-spacing: 3px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .cover-title {
+    font-family: var(--serif);
+    font-size: 2rem;
+    font-weight: 400;
+    color: var(--white);
+    line-height: 1.25;
+    margin-bottom: .75rem;
+  }
+  .cover-title em { color: var(--gold); font-style: normal; }
+  .cover-body {
+    font-size: .84rem;
+    color: #999;
+    line-height: 1.7;
+    max-width: 380px;
+  }
+  .cover-meta {
+    display: flex;
+    gap: 2rem;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #2e2e2e;
+  }
+  .cover-meta-item label {
+    display: block;
+    font-size: .65rem;
+    letter-spacing: 2px;
+    color: #555;
+    text-transform: uppercase;
+    margin-bottom: .35rem;
+  }
+  .cover-meta-item input {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #3a3a3a;
+    color: var(--white);
+    font-family: var(--sans);
+    font-size: .84rem;
+    padding: .3rem 0;
+    width: 160px;
+    outline: none;
+  }
+  .cover-meta-item input::placeholder { color: #444; }
+  .cover-meta-item input:focus { border-bottom-color: var(--gold); }
+
+  /* ── SECTIONS ── */
+  .section { display: none; }
+  .section.active { display: block; animation: rise .35s ease; }
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .sec-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  .sec-num {
+    background: var(--gold);
+    color: var(--white);
+    font-size: .72rem;
+    font-weight: 600;
+    padding: .35rem .6rem;
+    border-radius: 6px;
+    letter-spacing: .5px;
+    flex-shrink: 0;
+    margin-top: 4px;
+  }
+  .sec-titles {}
+  .sec-title {
+    font-family: var(--serif);
+    font-size: 1.35rem;
+    font-weight: 400;
+    color: var(--ink);
+    margin-bottom: .2rem;
+  }
+  .sec-desc {
+    font-size: .8rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* ── FIELDS ── */
+  .field { margin-bottom: 1.6rem; }
+  .field > label {
+    display: block;
+    font-size: .82rem;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: .35rem;
+    line-height: 1.45;
+  }
+  .field .hint {
+    font-size: .74rem;
+    color: var(--muted);
+    margin-bottom: .4rem;
+    margin-top: -.15rem;
+    font-style: italic;
+  }
+  .req { color: var(--gold); margin-left: 2px; }
+
+  input[type=text], input[type=email], textarea, select {
+    width: 100%;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: .7rem .9rem;
+    font-family: var(--sans);
+    font-size: .84rem;
+    color: var(--ink);
+    outline: none;
+    transition: border-color .2s;
+    appearance: none;
+  }
+  input[type=text]:focus, input[type=email]:focus,
+  textarea:focus, select:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(201,168,76,.1);
+  }
+  textarea { resize: vertical; min-height: 96px; line-height: 1.65; }
+  select { cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right .85rem center; padding-right: 2rem; }
+
+  /* ── CHOICES ── */
+  .choices { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; }
+  .choices.col1 { grid-template-columns: 1fr; }
+  .choice {
+    display: flex;
+    align-items: flex-start;
+    gap: .6rem;
+    padding: .65rem .85rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    cursor: pointer;
+    background: var(--white);
+    transition: border-color .15s, background .15s;
+    user-select: none;
+  }
+  .choice:hover { border-color: var(--gold); background: var(--gold-faint); }
+  .choice.on { border-color: var(--gold); background: var(--gold-pale); }
+  .choice input { display: none; }
+  .choice-box {
+    width: 16px; height: 16px;
+    border: 1.5px solid var(--border);
+    border-radius: 4px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all .15s;
+  }
+  .choice.radio .choice-box { border-radius: 50%; }
+  .choice.on .choice-box {
+    background: var(--gold);
+    border-color: var(--gold);
+  }
+  .choice.on .choice-box::after {
+    content: '';
+    display: block;
+    width: 6px; height: 6px;
+    background: white;
+    border-radius: 1px;
+  }
+  .choice.radio.on .choice-box::after { border-radius: 50%; }
+  .choice span { font-size: .82rem; color: var(--ink); line-height: 1.4; }
+
+  /* ── SCALE ── */
+  .scale-row {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 4px;
+    margin-top: .5rem;
+  }
+  .scale-cell {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: .45rem .2rem;
+    text-align: center;
+    font-size: .75rem;
+    font-weight: 500;
+    color: var(--muted);
+    cursor: pointer;
+    background: var(--white);
+    transition: all .15s;
+  }
+  .scale-cell:hover { border-color: var(--gold); color: var(--gold); }
+  .scale-cell.on { background: var(--gold); border-color: var(--gold); color: white; }
+  .scale-ends {
+    display: flex;
+    justify-content: space-between;
+    margin-top: .35rem;
+    font-size: .7rem;
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  /* ── NAV ── */
+  .nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 2.5rem;
+    gap: 1rem;
+  }
+  .dots {
+    display: flex;
+    gap: 6px;
+  }
+  .dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--border);
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: all .2s;
+  }
+  .dot.done { background: var(--gold-dim); }
+  .dot.now  { background: var(--ink); transform: scale(1.4); }
+
+  .btn {
+    font-family: var(--sans);
+    font-size: .82rem;
+    font-weight: 500;
+    padding: .65rem 1.35rem;
+    border-radius: var(--radius);
+    cursor: pointer;
+    border: 1.5px solid;
+    transition: all .15s;
+    white-space: nowrap;
+  }
+  .btn-outline {
+    background: transparent;
+    border-color: var(--border);
+    color: var(--muted);
+  }
+  .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+  .btn-gold {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--white);
+  }
+  .btn-gold:hover { background: var(--gold-dim); border-color: var(--gold-dim); }
+
+  /* ── THANK YOU ── */
+  .thankyou {
+    display: none;
+    text-align: center;
+    padding: 3.5rem 1.5rem;
+    animation: rise .4s ease;
+  }
+  .thankyou.active { display: block; }
+  .ty-check {
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    background: var(--gold-pale);
+    border: 1.5px solid var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 1.5rem;
+    font-size: 1.4rem;
+  }
+  .ty-title {
+    font-family: var(--serif);
+    font-size: 1.5rem;
+    font-weight: 400;
+    margin-bottom: .6rem;
+  }
+  .ty-body {
+    font-size: .85rem;
+    color: var(--muted);
+    line-height: 1.75;
+    max-width: 380px;
+    margin: 0 auto 2rem;
+  }
+  .ty-tag {
+    font-size: .65rem;
+    letter-spacing: 2.5px;
+    color: var(--gold);
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+
+  /* ── DATA NOTICE BOX ── */
+  .data-note {
+    background: var(--gold-faint);
+    border: 1px solid #e8d9a8;
+    border-radius: var(--radius);
+    padding: .85rem 1rem;
+    font-size: .76rem;
+    color: #7a6330;
+    line-height: 1.6;
+    margin-bottom: 1.75rem;
+  }
+  .data-note strong { font-weight: 600; }
+
+  @media (max-width: 520px) {
+    .choices { grid-template-columns: 1fr; }
+    .cover { padding: 2.5rem 1.5rem 2rem; }
+    .cover-meta { flex-direction: column; gap: 1.25rem; }
+    .cover-meta-item input { width: 100%; }
+    .scale-row { gap: 3px; }
+    .scale-cell { font-size: .68rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-logo">Arman Media</div>
+  <div class="header-step" id="hdr-step">Section 1 of 5</div>
+</div>
+<div class="progress-bar"><div class="progress-fill" id="prog"></div></div>
+
+<div class="shell">
+
+  <!-- COVER -->
+  <div class="cover">
+    <div class="cover-eyebrow">Client Onboarding</div>
+    <div class="cover-title">Your strategy<br>starts <em>here.</em></div>
+    <div class="cover-body">Complete this form before your onboarding call. The more specific your answers, the more precise your strategy will be. Takes about 10–15 minutes.</div>
+    <div class="cover-meta">
+      <div class="cover-meta-item">
+        <label>Your full name</label>
+        <input type="text" id="client-name" placeholder="Enter your name">
+      </div>
+      <div class="cover-meta-item">
+        <label>Date</label>
+        <input type="text" id="client-date" placeholder="DD / MM / YYYY">
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECTION 1: Business & Brand ── -->
+  <div class="section active" id="s0">
+    <div class="sec-header">
+      <div class="sec-num">01</div>
+      <div class="sec-titles">
+        <div class="sec-title">Business & Brand</div>
+        <div class="sec-desc">The foundation. Help us understand who you are and what you do.</div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Business or brand name<span class="req">*</span></label>
+      <input type="text" placeholder="e.g. The Clarity Collective">
+    </div>
+    <div class="field">
+      <label>Your niche or industry<span class="req">*</span></label>
+      <input type="text" placeholder="e.g. Business coaching for female entrepreneurs">
+    </div>
+    <div class="field">
+      <label>Describe what you do in 2–3 sentences<span class="req">*</span></label>
+      <div class="hint">As if explaining to someone you just met</div>
+      <textarea placeholder="Write your answer here..."></textarea>
+    </div>
+    <div class="field">
+      <label>What is the core transformation you deliver?</label>
+      <div class="hint">What is life like for your clients before vs. after working with you?</div>
+      <textarea placeholder="Before: ... After: ..."></textarea>
+    </div>
+    <div class="field">
+      <label>What makes you different from others in your niche?<span class="req">*</span></label>
+      <div class="hint">Your unique method, story, or perspective</div>
+      <textarea placeholder="Write your answer here..."></textarea>
+    </div>
+    <div class="field">
+      <label>Current business stage</label>
+      <div class="choices col1">
+        <label class="choice radio"><input type="radio" name="stage"><div class="choice-box"></div><span>Just launched (0–6 months)</span></label>
+        <label class="choice radio"><input type="radio" name="stage"><div class="choice-box"></div><span>Early stage (6–18 months)</span></label>
+        <label class="choice radio"><input type="radio" name="stage"><div class="choice-box"></div><span>Established (1–3 years)</span></label>
+        <label class="choice radio"><input type="radio" name="stage"><div class="choice-box"></div><span>Scaling (3+ years)</span></label>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECTION 2: Instagram & Challenges ── -->
+  <div class="section" id="s1">
+    <div class="sec-header">
+      <div class="sec-num">02</div>
+      <div class="sec-titles">
+        <div class="sec-title">Instagram & Challenges</div>
+        <div class="sec-desc">Where things stand today — and where you're stuck.</div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Instagram handle<span class="req">*</span></label>
+      <input type="text" placeholder="@yourhandle">
+    </div>
+    <div class="field">
+      <label>Current follower count</label>
+      <input type="text" placeholder="e.g. 3,200">
+    </div>
+    <div class="field">
+      <label>How consistent have you been posting in the last 90 days?</label>
+      <div class="choices col1">
+        <label class="choice radio"><input type="radio" name="consistency"><div class="choice-box"></div><span>Very inconsistent — posting rarely</span></label>
+        <label class="choice radio"><input type="radio" name="consistency"><div class="choice-box"></div><span>Somewhat inconsistent — 1–2x per week</span></label>
+        <label class="choice radio"><input type="radio" name="consistency"><div class="choice-box"></div><span>Fairly consistent — 3–4x per week</span></label>
+        <label class="choice radio"><input type="radio" name="consistency"><div class="choice-box"></div><span>Very consistent — 5+ times per week</span></label>
+      </div>
+    </div>
+    <div class="field">
+      <label>Formats you currently use (select all that apply)</label>
+      <div class="choices">
+        <label class="choice"><input type="checkbox"><div class="choice-box"></div><span>Static posts</span></label>
+        <label class="choice"><input type="checkbox"><div class="choice-box"></div><span>Carousels</span></label>
+        <label class="choice"><input type="checkbox"><div class="choice-box"></div><span>Reels</span></label>
+        <label class="choice"><input type="checkbox"><div class="choice-box"></div><span>Stories</span></label>
+        <label class="choice"><input type="checkbox"><div class="choice-box"></div><span>Lives</span></label>
+        <label class="choice"><input type="checkbox"><div class="choice-box"></div><span>Text-only posts</span></label>
+      </div>
+    </div>
+    <div class="field">
+      <label>What results are you currently getting from Instagram?</label>
+      <div class="hint">Be honest — growth, engagement, leads</div>
+      <textarea placeholder="Write your answer here..."></textarea>
+    </div>
+    <div class="field">
+      <label>Your biggest Instagram challenges right now (select all that apply)</label>
+      <div class="choices">
+        <label class="choice"><input type="checkbox"><div class="choice-box"></div><span>Don't know what to post</span></label>
+        <label class="choice"><input type="checkbox"><div class="choice-box"></div><span>No engagement</span></label>
+        <label class="choice"><input type="checkbox"><div class="choice-box"></div><span>Slow or no growth</span></label>
+        <label class="choice"><input type="checkbox"><div class="choice-box"></div><span>Followers don't convert</span></label>
+        <label class="choice"><input type="checkbox"><div class="choice-box"></div><span>Inconsistency</span></label>
+        <label class="choice"><input type="checkbox"><div class="choice-box"></div><span>Poor positioning</span></label>
+        <label class="choice"><input type="checkbox"><div class="choice-box"></div><span>Generic content</span></label>
+        <label class="choice"><input type="checkbox"><div class="choice-box"></div><span>Don't know what's working</span></label>
+      </div>
+    </div>
+    <div class="field">
+      <label>Describe your biggest Instagram frustration in your own words<span class="req">*</span></label>
+      <textarea placeholder="What is the main thing that is not working?"></textarea>
+    </div>
+    <div class="field">
+      <label>How satisfied are you with your Instagram right now?</label>
+      <div class="scale-row" id="scale-ig"></div>
+      <div class="scale-ends"><span>Very dissatisfied</span><span>Extremely satisfied</span></div>
+    </div>
+  </div>
+
+  <!-- ── SECTION 3: Target Audience ── -->
+  <div class="section" id="s2">
+    <div class="sec-header">
+      <div class="sec-num">03</div>
+      <div class="sec-titles">
+        <div class="sec-title">Target Audience</div>
+        <div class="sec-desc">The clearer your audience, the sharper your content.</div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Describe your ideal client in detail<span class="req">*</span></label>
+      <div class="hint">Age, gender, location, profession, income — be specific</div>
+      <textarea style="min-height:110px" placeholder="Write your answer here..."></textarea>
+    </div>
+    <div class="field">
+      <label>What is their primary pain point or struggle?<span class="req">*</span></label>
+      <textarea placeholder="What frustration or problem does your work solve for them?"></textarea>
+    </div>
+    <div class="field">
+      <label>What do they deeply desire or aspire to?</label>
+      <textarea placeholder="What outcome are they chasing?"></textarea>
+    </div>
+    <div class="field">
+      <label>What fears or objections hold them back from investing?</label>
+      <textarea placeholder="Write your answer here..."></textarea>
+    </div>
+    <div class="field">
+      <label>Where is your ideal client in their journey?</label>
+      <div class="choices col1">
+        <label class="choice radio"><input type="radio" name="journey"><div class="choice-box"></div><span>Beginner — just becoming aware of the problem</span></label>
+        <label class="choice radio"><input type="radio" name="journey"><div class="choice-box"></div><span>Intermediate — aware and actively looking for solutions</span></label>
+        <label class="choice radio"><input type="radio" name="journey"><div class="choice-box"></div><span>Advanced — experienced but stuck at the next level</span></label>
+        <label class="choice radio"><input type="radio" name="journey"><div class="choice-box"></div><span>Mixed — I serve people at different stages</span></label>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECTION 4: Offers & Goals ── -->
+  <div class="section" id="s3">
+    <div class="sec-header">
+      <div class="sec-num">04</div>
+      <div class="sec-titles">
+        <div class="sec-title">Offers & Goals</div>
+        <div class="sec-desc">What you're selling and what winning looks like for you.</div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>List your current offers<span class="req">*</span></label>
+      <div class="hint">Name, format, price point, duration</div>
+      <textarea style="min-height:120px" placeholder="e.g.&#10;1. 1:1 Coaching — 3-month — $3,000&#10;2. Group Mastermind — 6-month — $1,500&#10;3. Digital course — self-paced — $497"></textarea>
+    </div>
+    <div class="field">
+      <label>Your flagship offer (the one Instagram should drive leads to)<span class="req">*</span></label>
+      <input type="text" placeholder="e.g. 1:1 Business Coaching Programme">
+    </div>
+    <div class="field">
+      <label>Price range of your flagship offer</label>
+      <div class="choices">
+        <label class="choice radio"><input type="radio" name="price"><div class="choice-box"></div><span>Under $500</span></label>
+        <label class="choice radio"><input type="radio" name="price"><div class="choice-box"></div><span>$500 – $1,500</span></label>
+        <label class="choice radio"><input type="radio" name="price"><div class="choice-box"></div><span>$1,500 – $5,000</span></label>
+        <label class="choice radio"><input type="radio" name="price"><div class="choice-box"></div><span>$5,000 – $10,000</span></label>
+        <label class="choice radio"><input type="radio" name="price"><div class="choice-box"></div><span>$10,000+</span></label>
+      </div>
+    </div>
+    <div class="field">
+      <label>How do clients typically buy from you?</label>
+      <div class="choices">
+        <label class="choice"><input type="checkbox"><div class="choice-box"></div><span>Direct DM enquiry</span></label>
+        <label class="choice"><input type="checkbox"><div class="choice-box"></div><span>Discovery call</span></label>
+        <label class="choice"><input type="checkbox"><div class="choice-box"></div><span>Online checkout</span></label>
+        <label class="choice"><input type="checkbox"><div class="choice-box"></div><span>Referral</span></label>
+        <label class="choice"><input type="checkbox"><div class="choice-box"></div><span>Email list</span></label>
+        <label class="choice"><input type="checkbox"><div class="choice-box"></div><span>Other</span></label>
+      </div>
+    </div>
+    <div class="field">
+      <label>Top 3 Instagram goals for the next 90 days<span class="req">*</span></label>
+      <textarea placeholder="1.&#10;2.&#10;3."></textarea>
+    </div>
+    <div class="field">
+      <label>How many qualified leads per month would feel like a win?</label>
+      <input type="text" placeholder="e.g. 5–8 leads per month">
+    </div>
+    <div class="field">
+      <label>How important is Instagram to your revenue right now?</label>
+      <div class="scale-row" id="scale-rev"></div>
+      <div class="scale-ends"><span>Not very important</span><span>Critical to my business</span></div>
+    </div>
+  </div>
+
+  <!-- ── SECTION 5: Brand Voice ── -->
+  <div class="section" id="s4">
+    <div class="sec-header">
+      <div class="sec-num">05</div>
+      <div class="sec-titles">
+        <div class="sec-title">Brand Voice & Content</div>
+        <div class="sec-desc">The tone, personality, and format that make your content unmistakably yours.</div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Which words best describe your content tone? (select up to 4)</label>
+      <div class="choices">
+        <label class="choice"><input type="checkbox" name="tone"><div class="choice-box"></div><span>Authoritative & direct</span></label>
+        <label class="choice"><input type="checkbox" name="tone"><div class="choice-box"></div><span>Warm & empathetic</span></label>
+        <label class="choice"><input type="checkbox" name="tone"><div class="choice-box"></div><span>Energetic & motivational</span></label>
+        <label class="choice"><input type="checkbox" name="tone"><div class="choice-box"></div><span>Educational & informative</span></label>
+        <label class="choice"><input type="checkbox" name="tone"><div class="choice-box"></div><span>Conversational & relatable</span></label>
+        <label class="choice"><input type="checkbox" name="tone"><div class="choice-box"></div><span>Premium & aspirational</span></label>
+        <label class="choice"><input type="checkbox" name="tone"><div class="choice-box"></div><span>Witty & light-hearted</span></label>
+        <label class="choice"><input type="checkbox" name="tone"><div class="choice-box"></div><span>Bold & provocative</span></label>
+      </div>
+    </div>
+    <div class="field">
+      <label>Describe your brand voice in your own words<span class="req">*</span></label>
+      <div class="hint">How do you naturally communicate when you're at your best?</div>
+      <textarea placeholder="Write your answer here..."></textarea>
+    </div>
+    <div class="field">
+      <label>What is completely off-brand for you?</label>
+      <div class="hint">Tones, topics, or styles you'd never want associated with your content</div>
+      <textarea placeholder="Write your answer here..."></textarea>
+    </div>
+    <div class="field">
+      <label>How personal do you want your content to be?</label>
+      <div class="choices col1">
+        <label class="choice radio"><input type="radio" name="personal"><div class="choice-box"></div><span>Very personal — I share my life and story openly</span></label>
+        <label class="choice radio"><input type="radio" name="personal"><div class="choice-box"></div><span>Moderately personal — some context to build connection</span></label>
+        <label class="choice radio"><input type="radio" name="personal"><div class="choice-box"></div><span>Mostly professional — personal life mostly private</span></label>
+        <label class="choice radio"><input type="radio" name="personal"><div class="choice-box"></div><span>Strictly professional — entirely business-focused</span></label>
+      </div>
+    </div>
+    <div class="field">
+      <label>How many posts per week can you realistically publish?<span class="req">*</span></label>
+      <div class="choices">
+        <label class="choice radio"><input type="radio" name="freq"><div class="choice-box"></div><span>1–2 per week</span></label>
+        <label class="choice radio"><input type="radio" name="freq"><div class="choice-box"></div><span>3–4 per week</span></label>
+        <label class="choice radio"><input type="radio" name="freq"><div class="choice-box"></div><span>5–6 per week</span></label>
+        <label class="choice radio"><input type="radio" name="freq"><div class="choice-box"></div><span>Daily (7+)</span></label>
+      </div>
+    </div>
+    <div class="field">
+      <label>Formats you enjoy creating (select all that apply)</label>
+      <div class="choices">
+        <label class="choice"><input type="checkbox"><div class="choice-box"></div><span>Writing captions</span></label>
+        <label class="choice"><input type="checkbox"><div class="choice-box"></div><span>Filming Reels</span></label>
+        <label class="choice"><input type="checkbox"><div class="choice-box"></div><span>Carousels / slides</span></label>
+        <label class="choice"><input type="checkbox"><div class="choice-box"></div><span>Stories</span></label>
+        <label class="choice"><input type="checkbox"><div class="choice-box"></div><span>Lives</span></label>
+        <label class="choice"><input type="checkbox"><div class="choice-box"></div><span>Repurposing content</span></label>
+      </div>
+    </div>
+    <div class="field">
+      <label>Any additional notes for your strategist?</label>
+      <textarea placeholder="Anything important we haven't asked — or the one thing you most want us to help you unlock..."></textarea>
+    </div>
+  </div>
+
+  <!-- THANK YOU -->
+  <div class="thankyou" id="thankyou">
+    <div class="ty-check">✓</div>
+    <div class="ty-title">Questionnaire submitted</div>
+    <div class="ty-body">Thank you for completing this. Your strategist will review your responses before your onboarding call and reach out with next steps shortly.</div>
+    <div class="ty-tag">Arman Media &nbsp;·&nbsp; Instagram Growth Agency</div>
+  </div>
+
+  <!-- NAV -->
+  <div class="nav" id="nav">
+    <button class="btn btn-outline" id="btn-back" onclick="go(-1)">← Back</button>
+    <div class="dots" id="dots"></div>
+    <button class="btn btn-gold" id="btn-next" onclick="go(1)">Continue →</button>
+  </div>
+
+</div><!-- /shell -->
+
+<script>
+const TOTAL = 5;
+let cur = 0;
+
+function buildScale(id) {
+  const el = document.getElementById(id);
+  if (!el || el.children.length) return;
+  for (let i = 1; i <= 10; i++) {
+    const c = document.createElement('div');
+    c.className = 'scale-cell';
+    c.textContent = i;
+    c.onclick = function() {
+      el.querySelectorAll('.scale-cell').forEach(x => x.classList.remove('on'));
+      this.classList.add('on');
+    };
+    el.appendChild(c);
+  }
+}
+
+function buildDots() {
+  const w = document.getElementById('dots');
+  w.innerHTML = '';
+  for (let i = 0; i < TOTAL; i++) {
+    const d = document.createElement('button');
+    d.className = 'dot' + (i === cur ? ' now' : i < cur ? ' done' : '');
+    d.onclick = () => { cur = i; render(); };
+    w.appendChild(d);
+  }
+}
+
+function render() {
+  document.querySelectorAll('.section').forEach((s,i) => s.classList.toggle('active', i === cur));
+  document.getElementById('thankyou').classList.remove('active');
+  document.getElementById('nav').style.display = 'flex';
+
+  const pct = Math.round((cur / TOTAL) * 100);
+  document.getElementById('prog').style.width = pct + '%';
+  document.getElementById('hdr-step').textContent = 'Section ' + (cur + 1) + ' of ' + TOTAL;
+  document.getElementById('btn-back').style.visibility = cur === 0 ? 'hidden' : 'visible';
+  document.getElementById('btn-next').textContent = cur === TOTAL - 1 ? 'Submit form →' : 'Continue →';
+
+  buildDots();
+  buildScale('scale-ig');
+  buildScale('scale-rev');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function collectData() {
+  const sections = document.querySelectorAll('.section');
+  const out = { 'Client Name': document.getElementById('client-name')?.value || '', 'Date': document.getElementById('client-date')?.value || '' };
+  sections.forEach((sec, si) => {
+    const title = sec.querySelector('.sec-title')?.textContent || ('Section ' + (si+1));
+    sec.querySelectorAll('.field').forEach(f => {
+      const lbl = f.querySelector('label')?.textContent?.replace('*','').trim() || '';
+      let val = '';
+      const inp = f.querySelector('input[type=text], input[type=email], textarea');
+      if (inp) val = inp.value;
+      const checked = [...f.querySelectorAll('.choice.on span')].map(s => s.textContent).join(', ');
+      if (checked) val = checked;
+      const scale = f.querySelector('.scale-row');
+      if (scale) { const on = scale.querySelector('.scale-cell.on'); if (on) val = on.textContent + ' / 10'; }
+      if (lbl) out['[' + title + '] ' + lbl] = val;
+    });
+  });
+  return out;
+}
+
+async function submitToFormspree(data) {
+  const res = await fetch('https://formspree.io/f/mrewqdwl', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify(data)
+  });
+  return res.ok;
+}
+
+async function go(dir) {
+  if (dir === 1 && cur === TOTAL - 1) {
+    const btn = document.getElementById('btn-next');
+    btn.textContent = 'Submitting...';
+    btn.disabled = true;
+    const data = collectData();
+    const ok = await submitToFormspree(data);
+    if (ok) {
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.getElementById('thankyou').classList.add('active');
+      document.getElementById('nav').style.display = 'none';
+      document.getElementById('prog').style.width = '100%';
+      document.getElementById('hdr-step').textContent = 'Complete';
+    } else {
+      btn.textContent = 'Submit form →';
+      btn.disabled = false;
+      alert('Something went wrong. Please try again or contact Arman Media directly.');
+    }
+    return;
+  }
+  cur = Math.max(0, Math.min(TOTAL - 1, cur + dir));
+  render();
+}
+
+document.querySelectorAll('.choice').forEach(c => {
+  c.addEventListener('click', function(e) {
+    if (e.target.tagName === 'INPUT') return;
+    const inp = this.querySelector('input');
+    if (inp.type === 'radio') {
+      const name = inp.name;
+      document.querySelectorAll(`input[name="${name}"]`).forEach(r => r.closest('.choice').classList.remove('on'));
+      this.classList.add('on');
+      inp.checked = true;
+    } else {
+      inp.checked = !inp.checked;
+      this.classList.toggle('on', inp.checked);
+    }
+  });
+});
+
+render();
+</script>
+</body>
+</html>
